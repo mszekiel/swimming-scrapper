@@ -45,7 +45,7 @@ func getPoolData() []Pool {
 	}
 
 	for i := range poolData {
-		poolData[i].Timestamp = time.Now()
+		poolData[i].Timestamp = time.Now().UTC()
 	}
 
 	return poolData
