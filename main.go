@@ -2,17 +2,24 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
+	"mszekiel/swimming-scrapper/database"
 	"net/http"
+	"time"
 
 	"github.com/robfig/cron/v3"
 )
 
-func main() {
-	c := cron.New()
+type Pool struct {
+	PoolId    uint `json:"organizationUnitId"`
+	Capacity  uint `json:"maxPersonCount"`
+	Occupancy uint `json:"personCount"`
+	Timestamp time.Time
+}
+
+func getPoolData() []Pool {
 	client := http.Client{}
-	req, err := http.NewRequest("GET", "https://functions.api.ticos-systems.cloud/api/gates/counter?organizationUnitIds=30208", nil)
+	req, err := http.NewRequest("GET", "https://functions.api.ticos-systems.cloud/api/gates/counter?organizationUnitIds=30208&organizationUnitIds=30194&organizationUnitIds=30195&organizationUnitIds=30190&organizationUnitIds=129&organizationUnitIds=30208&organizationUnitIds=30197&organizationUnitIds=30184&organizationUnitIds=30182&organizationUnitIds=30187&organizationUnitIds=30199", nil)
 
 	if err != nil {
 		log.Fatalln(err)
@@ -25,24 +32,51 @@ func main() {
 		"Referer":      []string{"https://www.swm.de/"},
 	}
 
-	c.AddFunc("*/5 * * * *", func() {
-		res, err := client.Do(req)
+	res, err := client.Do(req)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-		if err != nil {
-			log.Fatalln(err)
-		}
+	var poolData []Pool
+	err = json.NewDecoder(res.Body).Decode(&poolData)
 
-		var j interface{}
-		err = json.NewDecoder(res.Body).Decode(&j)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-		if err != nil {
-			log.Fatalln(err)
-		}
+	for i := range poolData {
+		poolData[i].Timestamp = time.Now()
+	}
 
-		fmt.Printf("%s", j)
-	})
+	return poolData
+}
 
+func logPools() {
+	db := database.GetConnection()
+	data := getPoolData()
+
+	for _, pool := range data {
+		db.Create(pool)
+	}
+}
+
+func initDatabase() {
+	db := database.GetConnection()
+
+	db.AutoMigrate(&Pool{})
+
+}
+
+func main() {
+	c := cron.New()
+
+	initDatabase()
+	logPools()
+
+	c.AddFunc("*/5 * * * *", logPools)
 	c.Start()
+
+	select {}
 }
 
 // Swimming pools
