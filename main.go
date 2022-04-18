@@ -11,9 +11,9 @@ import (
 )
 
 type Pool struct {
-	PoolId    uint `json:"organizationUnitId"`
-	Capacity  uint `json:"maxPersonCount"`
-	Occupancy uint `json:"personCount"`
+	PoolId    int `json:"organizationUnitId"`
+	Capacity  int `json:"maxPersonCount"`
+	Occupancy int `json:"personCount"`
 	Timestamp time.Time
 }
 
@@ -44,8 +44,10 @@ func getPoolData() []Pool {
 		log.Fatalln(err)
 	}
 
+	currentTime := time.Now().UTC()
 	for i := range poolData {
-		poolData[i].Timestamp = time.Now().UTC()
+
+		poolData[i].Timestamp = currentTime
 	}
 
 	return poolData
