@@ -56,10 +56,7 @@ func getPoolData() []Pool {
 func logPools() {
 	db := database.GetConnection()
 	data := getPoolData()
-
-	for _, pool := range data {
-		db.Create(pool)
-	}
+	db.Create(data)
 }
 
 func initDatabase() {
