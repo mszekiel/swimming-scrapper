@@ -1,4 +1,4 @@
-package database
+package common
 
 import (
 	"os"
@@ -8,9 +8,13 @@ import (
 	"gorm.io/gorm"
 )
 
-var db *gorm.DB
+type Database struct {
+	*gorm.DB
+}
 
-func init() {
+var DB *gorm.DB
+
+func Init() *gorm.DB {
 	dsn := os.Getenv("PG_DSN")
 
 	_db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -19,10 +23,11 @@ func init() {
 		panic(err.Error())
 	}
 
-	db = _db
+	DB = _db
 
+	return DB
 }
 
 func GetConnection() *gorm.DB {
-	return db
+	return DB
 }
