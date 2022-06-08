@@ -4,6 +4,7 @@ import (
 	"mszekiel/swimming-scrapper/common"
 	"mszekiel/swimming-scrapper/controllers"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -64,16 +65,20 @@ import (
 // }
 
 func main() {
-	r := gin.Default()
+	router := gin.Default()
 
 	common.InitCache()
 	common.ConnectDatabase()
 
-	v1 := r.Group("/api")
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"https://swimming.up.railway.app", "http://localhost:3000"},
+		AllowMethods: []string{"GET"},
+	}))
 
+	v1 := router.Group("/api")
 	controllers.Setup(v1)
 
-	r.Run()
+	router.Run()
 
 	// c := cron.New()
 
