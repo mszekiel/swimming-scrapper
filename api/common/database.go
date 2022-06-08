@@ -1,6 +1,7 @@
 package common
 
 import (
+	"mszekiel/swimming-scrapper/models"
 	"os"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -14,7 +15,13 @@ type Database struct {
 
 var DB *gorm.DB
 
-func Init() *gorm.DB {
+func Migrate() {
+	db := GetConnection()
+
+	db.AutoMigrate(&models.Pool{})
+}
+
+func ConnectDatabase() *gorm.DB {
 	dsn := os.Getenv("PG_DSN")
 
 	_db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -24,6 +31,8 @@ func Init() *gorm.DB {
 	}
 
 	DB = _db
+
+	Migrate()
 
 	return DB
 }

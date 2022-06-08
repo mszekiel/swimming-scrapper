@@ -2,10 +2,9 @@ package main
 
 import (
 	"mszekiel/swimming-scrapper/common"
-	"mszekiel/swimming-scrapper/pools"
+	"mszekiel/swimming-scrapper/controllers"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 // type Pool struct {
@@ -64,26 +63,20 @@ import (
 
 // }
 
-func migrate(db *gorm.DB) {
-	db.AutoMigrate(&pools.Pool{})
-}
-
 func main() {
-	db := common.Init()
-
-	migrate(db)
-
 	r := gin.Default()
+
+	common.InitCache()
+	common.ConnectDatabase()
 
 	v1 := r.Group("/api")
 
-	pools.PoolsAnonymousRegister(v1.Group("/pools"))
+	controllers.Setup(v1)
 
 	r.Run()
 
 	// c := cron.New()
 
-	// initDatabase()
 	// logPools()
 
 	// c.AddFunc("*/5 * * * *", logPools)
