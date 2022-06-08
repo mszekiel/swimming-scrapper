@@ -4,6 +4,8 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { divIcon } from "leaflet";
 import { Marker } from "react-leaflet";
 
+import swimmerImage from "./assets/swimmer.png";
+
 const PoolIcon = () => (
   <div
     style={{
@@ -18,7 +20,7 @@ const PoolIcon = () => (
   >
     <img
       style={{ width: "35px", height: "35px", filter: "invert(1)" }}
-      src="assets/swimmer.png"
+      src={swimmerImage}
     />
   </div>
 );
