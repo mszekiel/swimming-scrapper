@@ -10,8 +10,8 @@ const PoolIcon = () => (
   <div
     style={{
       backgroundColor: "black",
-      width: "50px",
-      height: "50px",
+      width: "40px",
+      height: "40px",
       borderRadius: "25px",
       display: "flex",
       justifyContent: "center",
@@ -19,7 +19,7 @@ const PoolIcon = () => (
     }}
   >
     <img
-      style={{ width: "35px", height: "35px", filter: "invert(1)" }}
+      style={{ width: "30px", height: "30px", filter: "invert(1)" }}
       src={swimmerImage}
     />
   </div>

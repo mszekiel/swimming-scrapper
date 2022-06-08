@@ -19,6 +19,7 @@ func Migrate() {
 	db := GetConnection()
 
 	db.AutoMigrate(&models.Pool{})
+	db.AutoMigrate(&models.Occupancy{})
 }
 
 func ConnectDatabase() *gorm.DB {
