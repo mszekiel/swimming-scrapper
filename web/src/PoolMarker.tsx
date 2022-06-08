@@ -1,8 +1,8 @@
 import { ComponentProps } from "react";
-import { Marker } from "react-leaflet";
-import { renderToStaticMarkup, renderToString } from "react-dom/server";
+import { renderToStaticMarkup } from "react-dom/server";
+
 import { divIcon } from "leaflet";
-import { css } from "@emotion/react";
+import { Marker } from "react-leaflet";
 
 const PoolIcon = () => (
   <div
