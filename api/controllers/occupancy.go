@@ -10,6 +10,12 @@ import (
 
 func OccupancyRegister(router *gin.RouterGroup) {
 	router.GET("/occupancy", FindOccupancy)
+	router.GET("/hello", Hello)
+}
+
+func Hello(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"data": "Hello world!"})
+
 }
 
 type FincOccupancyResponse struct {
